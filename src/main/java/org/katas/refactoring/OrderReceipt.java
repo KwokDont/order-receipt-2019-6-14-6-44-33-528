@@ -9,6 +9,8 @@ package org.katas.refactoring;
 public class OrderReceipt {
     private Order o;
 
+    private final double TAX_RATE_OF_10_PERCENT = 0.10d;
+
     public OrderReceipt(Order o) {
         this.o = o;
     }
@@ -16,31 +18,37 @@ public class OrderReceipt {
     public String printReceipt() {
         StringBuilder output = new StringBuilder();
         output = printHeaders(output);
-        // print date, bill no, customer name
-//        output.append("Date - " + order.getDate();
-        output.append(o.getCustomerName());
-        output.append(o.getCustomerAddress());
-//        output.append(order.getCustomerLoyaltyNumber());
 
-        // prints lineItems
-        double totSalesTx = 0d;
-        double tot = 0d;
-        for (LineItem lineItem : o.getLineItems()) {
-            output = appendItemLine(output,lineItem);
-            // calculate sales tax @ rate of 10%
-            double salesTax = lineItem.totalAmount() * .10;
-            totSalesTx += salesTax;
-            // calculate total amount of lineItem = price * quantity + 10 % sales tax
-            tot += lineItem.totalAmount() + salesTax;
-        }
+        output = printCustomerNameAndAddress(output);
 
-        output = printsSalesTax(output,totSalesTx)
-                .append(printTotalAmount(output,tot));
+        output = printItemsWithTaxAndTotal(output);
+
         return output.toString();
     }
 
     StringBuilder printHeaders(StringBuilder output){
         return output.append("======Printing Orders======\n");
+    }
+
+    StringBuilder printCustomerNameAndAddress(StringBuilder output){
+        output.append(o.getCustomerName());
+        return output.append(o.getCustomerAddress());
+    }
+
+    StringBuilder printItemsWithTaxAndTotal(StringBuilder output){
+
+        double totSalesTx = 0d;
+        double tot = 0d;
+
+        for (LineItem lineItem : o.getLineItems()) {
+            output = appendItemLine(output, lineItem);
+            double salesTax = lineItem.totalAmount() * TAX_RATE_OF_10_PERCENT;
+            totSalesTx += salesTax;
+            tot += lineItem.totalAmount() + salesTax;
+        }
+        output = printsSalesTax(output,totSalesTx)
+                .append(printTotalAmount(output,tot));
+        return output;
     }
 
     StringBuilder appendItemLine(StringBuilder output, LineItem lineItem){
