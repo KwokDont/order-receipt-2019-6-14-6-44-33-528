@@ -17,11 +17,9 @@ public class OrderReceipt {
 
     public String printReceipt() {
         StringBuilder output = new StringBuilder();
-        output = printHeaders(output);
-
-        output = printCustomerNameAndAddress(output);
-
-        output = printItemsWithTaxAndTotal(output);
+        output = printHeaders(output)
+                .append(printCustomerNameAndAddress(output))
+                .append(printItemsWithTaxAndTotal(output));
 
         return output.toString();
     }
