@@ -7,12 +7,12 @@ package org.katas.refactoring;
  * total sales tax) and prints it.
  */
 public class OrderReceipt {
-    private Order o;
+    private Order order;
 
     private final double TAX_RATE_OF_10_PERCENT = 0.10d;
 
-    public OrderReceipt(Order o) {
-        this.o = o;
+    public OrderReceipt(Order order) {
+        this.order = order;
     }
 
     public String printReceipt() {
@@ -29,28 +29,28 @@ public class OrderReceipt {
     }
 
     StringBuilder printCustomerNameAndAddress(StringBuilder output){
-        output.append(o.getCustomerName());
-        return output.append(o.getCustomerAddress());
+        output.append(order.getName());
+        return output.append(order.getAddress());
     }
 
     StringBuilder printItemsWithTaxAndTotal(StringBuilder output){
 
         double totSalesTx = 0d;
-        double tot = 0d;
+        double total = 0d;
 
-        for (LineItem lineItem : o.getLineItems()) {
+        for (LineItem lineItem : order.getItems()) {
             output = appendItemLine(output, lineItem);
             double salesTax = lineItem.totalAmount() * TAX_RATE_OF_10_PERCENT;
             totSalesTx += salesTax;
-            tot += lineItem.totalAmount() + salesTax;
+            total += lineItem.totalAmount() + salesTax;
         }
         output = printsSalesTax(output,totSalesTx)
-                .append(printTotalAmount(output,tot));
+                .append(printTotalAmount(output,total));
         return output;
     }
 
     StringBuilder appendItemLine(StringBuilder output, LineItem lineItem){
-        output.append(lineItem.getDescription());
+        output.append(lineItem.getDesc());
         output.append('\t');
         output.append(lineItem.getPrice());
         output.append('\t');
